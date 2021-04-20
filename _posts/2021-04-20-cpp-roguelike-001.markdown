@@ -3,6 +3,7 @@ layout: post
 title:  "Chasms 001 - Making an ASCII Roguelike in C++"
 date:   2021-04-20 20:30:00 +1000
 categories: jekyll update
+permalink: /roguelike-001/
 ---
 
 Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by [POWDER](http://www.zincland.com/powder/), and admittedly, is my only exposure to the roguelike genre.
