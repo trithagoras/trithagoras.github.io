@@ -1,3 +1,4 @@
 
 
-![batchler.me](https://trithagoras.github.io)
+[batchler.me](https://trithagoras.github.io)
+
