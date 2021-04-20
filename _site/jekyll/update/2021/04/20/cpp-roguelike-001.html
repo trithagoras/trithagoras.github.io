@@ -6,9 +6,10 @@
 <title>Chasms 001 - Making an ASCII Roguelike in C++ | batchler.me</title>
 <meta name="generator" content="Jekyll v4.2.0" />
 <meta property="og:title" content="Chasms 001 - Making an ASCII Roguelike in C++" />
+<meta name="author" content="Corey Batchler" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre." />
-<meta property="og:description" content="Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre." />
+<meta name="description" content="Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre." />
+<meta property="og:description" content="Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre." />
 <link rel="canonical" href="/jekyll/update/2021/04/20/cpp-roguelike-001.html" />
 <meta property="og:url" content="/jekyll/update/2021/04/20/cpp-roguelike-001.html" />
 <meta property="og:site_name" content="batchler.me" />
@@ -17,7 +18,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Chasms 001 - Making an ASCII Roguelike in C++" />
 <script type="application/ld+json">
-{"description":"Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre.","headline":"Chasms 001 - Making an ASCII Roguelike in C++","dateModified":"2021-04-20T20:30:00+10:00","datePublished":"2021-04-20T20:30:00+10:00","url":"/jekyll/update/2021/04/20/cpp-roguelike-001.html","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll/update/2021/04/20/cpp-roguelike-001.html"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"description":"Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre.","headline":"Chasms 001 - Making an ASCII Roguelike in C++","dateModified":"2021-04-20T20:30:00+10:00","datePublished":"2021-04-20T20:30:00+10:00","url":"/jekyll/update/2021/04/20/cpp-roguelike-001.html","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll/update/2021/04/20/cpp-roguelike-001.html"},"author":{"@type":"Person","name":"Corey Batchler"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="batchler.me" /></head>
 <body><header class="site-header" role="banner">
@@ -47,9 +48,9 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by <a href="http://www.zincland.com/powder/">POWDER</a>, and admittedly, is my only exposure to the roguelike genre.</p>
+    <p>Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by <a href="http://www.zincland.com/powder/">POWDER</a>, and admittedly, is my only exposure to the roguelike genre.</p>
 
-<p>Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game runs through its loop and stores its data.</p>
+<p>Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game executes its loop.</p>
 
 <p>At the end of part 1, you can expect the game to look like this:</p>
 
@@ -88,7 +89,7 @@
 
 <h2 id="the-main-loop">The Main Loop</h2>
 
-<p>All games are represented with a main loop. Game engines such as Unity hide this from you, but Unity’s main loop is abstractly no different to ours.</p>
+<p>All games are represented with a main loop. Our game will have the added benefit of omitting any taxing physics calculations present with many other genres of game.</p>
 
 <p>Here is the order that the game will follow:</p>
 <ol>
@@ -96,6 +97,10 @@
   <li><code class="language-plaintext highlighter-rouge">draw()</code> - the screen is refreshed and redrawn to reflect the previous update</li>
   <li><code class="language-plaintext highlighter-rouge">get_input()</code> - the input is polled here, and stored to be processed in the next <code class="language-plaintext highlighter-rouge">update()</code> call.</li>
 </ol>
+
+<h2 id="the-game-class">The Game Class</h2>
+
+<p>The main game itself will be presenting in a class. Although the class should only be instantiated once, it still acts as a neat collection of <strong>state</strong>.</p>
 
   </div><a class="u-url" href="/jekyll/update/2021/04/20/cpp-roguelike-001.html" hidden></a>
 </article>
@@ -111,14 +116,14 @@
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li class="p-name">batchler.me</li><li><a class="u-email" href="mailto:corey@batchler.me">corey@batchler.me</a></li></ul>
+          <li class="p-name">Corey Batchler</li><li><a class="u-email" href="mailto:corey@batchler.me">corey@batchler.me</a></li></ul>
       </div>
 
-      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/trithagoras"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">trithagoras</span></a></li><li><a href="https://www.twitter.com/cb3bolt"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">cb3bolt</span></a></li></ul>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/trithagoras"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">trithagoras</span></a></li><li><a href="https://www.linkedin.com/in/coreybatchler"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">coreybatchler</span></a></li></ul>
 </div>
 
       <div class="footer-col footer-col-3">
-        <p></p>
+        <p>Third year CS student at the University of Queensland.</p>
       </div>
     </div>
 

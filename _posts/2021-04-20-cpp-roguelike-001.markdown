@@ -5,9 +5,9 @@ date:   2021-04-20 20:30:00 +1000
 categories: jekyll update
 ---
 
-Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by [POWDER](http://www.zincland.com/powder/), and admittedly, is my only exposure to the roguelike genre.
+Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by [POWDER](http://www.zincland.com/powder/), and admittedly, is my only exposure to the roguelike genre.
 
-Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game runs through its loop and stores its data.
+Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game executes its loop.
 
 At the end of part 1, you can expect the game to look like this:
 
@@ -50,9 +50,14 @@ Now, let's consider the main control flow for our game, which is the most import
 
 ## The Main Loop
 
-All games are represented with a main loop. Game engines such as Unity hide this from you, but Unity's main loop is abstractly no different to ours.
+All games are represented with a main loop. Our game will have the added benefit of omitting any taxing physics calculations present with many other genres of game.
 
 Here is the order that the game will follow:
 1. `update()` - all logic and input processing is done here
 2. `draw()` - the screen is refreshed and redrawn to reflect the previous update
 3. `get_input()` - the input is polled here, and stored to be processed in the next `update()` call.
+
+
+## The Game Class
+
+The main game itself will be presenting in a class. Although the class should only be instantiated once, it still acts as a neat collection of **state**.

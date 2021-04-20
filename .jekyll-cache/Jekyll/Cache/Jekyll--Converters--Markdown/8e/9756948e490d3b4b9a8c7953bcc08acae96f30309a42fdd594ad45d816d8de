@@ -1,6 +1,6 @@
-I":<p>Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by <a href="http://www.zincland.com/powder/">POWDER</a>, and admittedly, is my only exposure to the roguelike genre.</p>
+I"<p>Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by <a href="http://www.zincland.com/powder/">POWDER</a>, and admittedly, is my only exposure to the roguelike genre.</p>
 
-<p>Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game runs through its loop and stores its data.</p>
+<p>Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game executes its loop.</p>
 
 <p>At the end of part 1, you can expect the game to look like this:</p>
 
@@ -39,7 +39,7 @@
 
 <h2 id="the-main-loop">The Main Loop</h2>
 
-<p>All games are represented with a main loop. Game engines such as Unity hide this from you, but Unity’s main loop is abstractly no different to ours.</p>
+<p>All games are represented with a main loop. Our game will have the added benefit of omitting any taxing physics calculations present with many other genres of game.</p>
 
 <p>Here is the order that the game will follow:</p>
 <ol>
@@ -47,4 +47,8 @@
   <li><code class="language-plaintext highlighter-rouge">draw()</code> - the screen is refreshed and redrawn to reflect the previous update</li>
   <li><code class="language-plaintext highlighter-rouge">get_input()</code> - the input is polled here, and stored to be processed in the next <code class="language-plaintext highlighter-rouge">update()</code> call.</li>
 </ol>
+
+<h2 id="the-game-class">The Game Class</h2>
+
+<p>The main game itself will be presenting in a class. Although the class should only be instantiated once, it still acts as a neat collection of <strong>state</strong>.</p>
 :ET
