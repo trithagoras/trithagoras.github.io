@@ -5,7 +5,7 @@
 layout: home
 ---
 
-<!-- ![Banner](/assets/banner.jpg) -->
+![Story Bridge](/assets/storyb.jpg)
 
-
-<img src="/assets/banner.jpg">
+*Brisbane's Story Bridge, Nov. 2019. Taken by me after a few brews at Felon's.*
+<br><br>

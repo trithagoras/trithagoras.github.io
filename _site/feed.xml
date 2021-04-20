@@ -1,17 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-04-20T21:00:13+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle></subtitle><entry><title type="html">Chasms 001 - Making an ASCII Roguelike in C++</title><link href="/jekyll/update/2021/04/20/cpp-roguelike-001.html" rel="alternate" type="text/html" title="Chasms 001 - Making an ASCII Roguelike in C++" /><published>2021-04-20T20:30:00+10:00</published><updated>2021-04-20T20:30:00+10:00</updated><id>/jekyll/update/2021/04/20/cpp-roguelike-001</id><content type="html" xml:base="/jekyll/update/2021/04/20/cpp-roguelike-001.html">&lt;p&gt;Welcome friends.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Welcome friends.</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="/jekyll/update/2021/04/20/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2021-04-20T18:15:15+10:00</published><updated>2021-04-20T18:15:15+10:00</updated><id>/jekyll/update/2021/04/20/welcome-to-jekyll</id><content type="html" xml:base="/jekyll/update/2021/04/20/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-04-20T23:56:50+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle></subtitle><entry><title type="html">Chasms 001 - Making an ASCII Roguelike in C++</title><link href="/jekyll/update/2021/04/20/cpp-roguelike-001.html" rel="alternate" type="text/html" title="Chasms 001 - Making an ASCII Roguelike in C++" /><published>2021-04-20T20:30:00+10:00</published><updated>2021-04-20T20:30:00+10:00</updated><id>/jekyll/update/2021/04/20/cpp-roguelike-001</id><content type="html" xml:base="/jekyll/update/2021/04/20/cpp-roguelike-001.html">&lt;p&gt;Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by &lt;a href=&quot;http://www.zincland.com/powder/&quot;&gt;POWDER&lt;/a&gt;, and admittedly, is my only exposure to the roguelike genre.&lt;/p&gt;
 
-&lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
+&lt;p&gt;Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game runs through its loop and stores its data.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR-MONTH-DAY-title.MARKUP&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;At the end of part 1, you can expect the game to look like this:&lt;/p&gt;
 
-&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR&lt;/code&gt; is a four-digit number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONTH&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DAY&lt;/code&gt; are both two-digit numbers, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MARKUP&lt;/code&gt; is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/001-gameplay.gif&quot; alt=&quot;Gameplay&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Tom&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &apos;Hi, Tom&apos; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;the-motivation&quot;&gt;The Motivation&lt;/h2&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+&lt;p&gt;As you can see in the above gameplay, Chasms is a command-line ASCII turn-based roguelike. By keeping it ASCII, we don’t have to spend any time on graphics, and the player gets the benefit of playing straight from the terminal.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h2&gt;
+
+&lt;p&gt;Whether you are making the game in C++, C, Python, Java, or any other language, the first thing to consider is how we’re delivering our “graphics”. For this, of course, we will be utilising the &lt;a href=&quot;https://en.wikipedia.org/wiki/Ncurses&quot;&gt;ncurses&lt;/a&gt; library. This will allow us to draw directly to the terminal at any position, in any colour, as well as instantly read keystrokes.&lt;/p&gt;
+
+&lt;p&gt;For C/C++, simply add the following line to your CMakeLists.txt&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cmake&quot; data-lang=&quot;cmake&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;CMAKE_CXX_FLAGS -lncurses&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;Removing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;XX&lt;/code&gt; if using C&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Python comes with the curses library by default, and has &lt;em&gt;okay&lt;/em&gt; accompanying documentation &lt;a href=&quot;https://docs.python.org/3/howto/curses.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I’ve also tried to find ncurses bindings for C# in the past but had no luck. I did, however, end up writing my own bindings by taking advantage of Dll Imports. e.g.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c#&quot; data-lang=&quot;c#&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;DllImport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;libncurses.5.4.dylib&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EntryPoint&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mvaddstr&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AddString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;I might make a separate post about this one day :)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, let’s consider the main control flow for our game, which is the most important thing to get right.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;the-main-loop&quot;&gt;The Main Loop&lt;/h2&gt;
+
+&lt;p&gt;All games are represented with a main loop. Game engines such as Unity hide this from you, but Unity’s main loop is abstractly no different to ours.&lt;/p&gt;
+
+&lt;p&gt;Here is the order that the game will follow:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update()&lt;/code&gt; - all logic and input processing is done here&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;draw()&lt;/code&gt; - the screen is refreshed and redrawn to reflect the previous update&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get_input()&lt;/code&gt; - the input is polled here, and stored to be processed in the next &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update()&lt;/code&gt; call.&lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Welcome to my tutorial, thoughts, and philosophy regarding easy and correct game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by POWDER, and admittedly, is my only exposure to the roguelike genre.</summary></entry></feed>
