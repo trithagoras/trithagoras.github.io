@@ -4,3 +4,8 @@
 
 layout: home
 ---
+
+<!-- ![Banner](/assets/banner.jpg) -->
+
+
+<img src="/assets/banner.jpg">
