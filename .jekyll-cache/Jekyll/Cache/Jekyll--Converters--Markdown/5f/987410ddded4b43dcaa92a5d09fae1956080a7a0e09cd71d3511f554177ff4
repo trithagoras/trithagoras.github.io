@@ -1,4 +1,4 @@
-I"<p>Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by <a href="http://www.zincland.com/powder/">POWDER</a>, and admittedly, is my only exposure to the roguelike genre.</p>
+I"�<p>Welcome to my tutorial, thoughts, and philosophy regarding easy and logical game design. This tutorial series will see the creation of my ASCII roguelike, Chasms, which is heavily inspired by <a href="http://www.zincland.com/powder/">POWDER</a>, and admittedly, is my only exposure to the roguelike genre.</p>
 
 <p>Chasms will be written with C++, but do not be deterred. This series tries to avoid displaying and explaining each line of code, but rather delivers a higher level explanation of how a game executes its loop.</p>
 
@@ -48,7 +48,46 @@
   <li><code class="language-plaintext highlighter-rouge">get_input()</code> - the input is polled here, and stored to be processed in the next <code class="language-plaintext highlighter-rouge">update()</code> call.</li>
 </ol>
 
+<p>The main game itself will be presented in a class. Although the class should only be instantiated once, it still acts as a neat collection of <strong>state</strong>. It also allows us to reinstantiate it in the case we want to start a new game, for example.</p>
+
+<p>All drawing operations will be presented in a collection of functions outside any class. Good user-friendly software will separate the view (drawing) from the controller (game); see <a href="https://en.wikipedia.org/wiki/Model–view–controller">MVC</a>.</p>
+
+<p>Good C++ design is also to not use classes if you don’t need to, and as such, all drawing functions will be grouped in a namespace, as there is no need for keeping state.</p>
+
+<p><br /></p>
+
+<h2 id="the-game-state">The Game State</h2>
+<p>The state of a program is recursively defined as a set of the state of all of its variables.</p>
+
+<p>We consider the <strong>basic</strong> data type (int, bool, char, float, etc.) and the <strong>composite</strong> data type (arrays, structs, classes, etc.). We recognise that any composite data type can be recursively constructed with basic data types.</p>
+
+<p>With this knowledge, plus the knowledge that the state of any basic data type variable is simply the its value, we can conclude that the state of any composite data type is recursively defined as the state of all of its fields.</p>
+
+<p>As an example, consider the following class:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">Student</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">sid</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">enrolled</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">enroll</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">enrolled</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>And a student s defined as such:</p>
+
+<p><code class="language-plaintext highlighter-rouge">s.sid = 1234; s.name = "billy"; s.enrolled = false</code></p>
+
+<p>Then we can say the state of Student s is the following tuple:</p>
+
+<p>( 1234, “billy”, false )</p>
+
+<p>This is important, as now we can construct classes by considering the state we wish to keep. In our Game class, we want at least 25 <em>floors</em>, each with a set of <em>entities</em> that exist on that floor, and a reference to our <em>player</em> object. We can now consider our Game class.</p>
+
+<p><br /></p>
+
 <h2 id="the-game-class">The Game Class</h2>
 
-<p>The main game itself will be presenting in a class. Although the class should only be instantiated once, it still acts as a neat collection of <strong>state</strong>.</p>
 :ET
