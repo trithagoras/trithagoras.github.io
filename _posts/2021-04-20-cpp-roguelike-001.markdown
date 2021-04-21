@@ -10,7 +10,6 @@ permalink: /roguelike-001/
 - [The Motivation](#the-motivation)
 - [Getting Started](#getting-started)
 - [The Main Loop](#the-main-loop)
-- [The Game State](#the-game-state)
 - [The Game Class](#the-game-class)
 - [Entity, Mob, and Player Class](#entity-mob-and-player-class)
 - [The Floor Class](#the-floor-class)
@@ -79,38 +78,10 @@ Good C++ design is also to not use classes if you don't need to, and as such, al
 
 <br>
 
-## The Game State
-The state of a program is recursively defined as a set of the state of all of its variables.
-
-We consider the **basic** data type (int, bool, char, float, etc.) and the **composite** data type (arrays, structs, classes, etc.). We recognise that any composite data type can be recursively constructed with basic data types.
-
-With this knowledge, plus the knowledge that the state of any basic data type variable is simply its value, we can conclude that the state of any composite data type is recursively defined as the state of all of its fields.
-
-As an example, consider the following class:
-
-{% highlight c++ %}
-class Entity {
-    std::string name, description;
-    Floor current_floor;
-    int y, x;
-};
-{% endhighlight %}
-
-And an entity s defined as such (noting <?> here represents an object we don't necessarily need to know the value of):
-
-`s.name = "Gold Coin"; s.description = "shiny"; s.current_floor = <?>; s.y = 4; s.x = 10`
-
-Then we can say the state of Entity s is the following tuple:
-
-( "Gold Coin", "shiny", `State(s.current_floor)`, 4, 10)
-
-This is important, as now we can construct classes by considering the state we wish to keep. In our Game class, we want at least 25 *floors*, each with a set of *entities* that exist on that floor, and a reference to our *player* object. We can now consider our Game class.
-
-<br>
 
 ## The Game Class
 
-So now we know we want to keep track of the player here as well as all the floors. We also want the class to consist of the logic functions, but these do not compose state, they simply act to modify existing state.
+We want to keep track of the player here as well as all the floors and as all of the logic functions.
 
 {% highlight c++ %}
 class Game {
@@ -135,23 +106,31 @@ public:
 
 The idea of this class is simple. In `main()`, a `Game` object will be instantiated and then started using `start()`. This method will initialise any other variables, then call the `main_loop()` method. The body of this function is the main game loop mentioned earlier, and `update()` and `get_input()` are shown here.
 
-Before we can get into any of the drawing, we will create the Player class and the Floor class. We will create them as basic as possible for now, and extend them in future tutorials.
+Before we can get into any of the drawing, we will create the `Player` class and the `Floor` class. We will create them as basic as possible for now, and extend them in future tutorials.
 
 <br>
 
 ## Entity, Mob, and Player Class
 For a larger scale game, the Entity-Component-System design is more effective than the gameobject inheritence design, but for Chasms, we mostly know what we want as a final product, and as such, can work with the somewhat easier inheritence pattern.
 
-To begin, we will need a base gameobject class. I've come to calling this class the **Entity** class. Entity was actually described in the [Game State](#the-game-state) section above.
+To begin, we will need a base gameobject class. I've come to calling this class the **Entity** class. Entity is defined to be:
 
-Next, we will need an inherited class called the Mob (mobile object). This will act as the base for all monsters, creatures, humanoids, and indeed, the player character. For now, we will create an empty Mob class that simply inherits Entity.
+{% highlight c++ %}
+class Entity {
+    std::string name, description;
+    Floor current_floor;
+    int y, x;
+};
+{% endhighlight %}
 
-Finally, the Player class can also simply inherit the Mob class with no extra members for now.
+Next, we will need an inherited class called the `Mob` (mobile object). This will act as the base for all monsters, creatures, humanoids, and indeed, the player character. For now, we will create an empty Mob class that simply inherits Entity.
+
+Finally, the Player class can also simply inherit the `Mob` class with no extra members for now.
 
 <br>
 
 ## The Floor Class
-Chasms takes place within a 25-floor dungeon. As such, the dungeon can entirely be described as an ordered array of 25 instances of a Floor class.
+Chasms takes place within a 25-floor dungeon. As such, the dungeon can entirely be described as an ordered array of 25 instances of a `Floor` class.
 
 Indeed, in the Game class above, we have an `std::array<Floor, 25>` which describes this.
 
@@ -291,6 +270,6 @@ void Game::process_input() {
 }
 {% endhighlight %}
 
-*Where translate is a Mob method that translates our x and y values*.
+*Where* `translate` *is a Mob method that translates our x and y values*.
 
 That was the final step. Congratulations! Now, you should have a game in the same state as what was presenting in the above gif. Stay tuned for future parts :)
