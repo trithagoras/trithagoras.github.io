@@ -1,9 +1,11 @@
-I"×#<p>Previous part: <a href="/roguelike-001/">001 - Making an ASCII Roguelike in C++</a></p>
+I"c*<p>Previous part: <a href="/roguelike-001/">001 - Making an ASCII Roguelike in C++</a></p>
 
 <p><br /></p>
 
 <h2 id="table-of-contents">Table of Contents</h2>
-<p>pass</p>
+<ol>
+  <li><a href="#generating-the-maze">Generating the Maze</a></li>
+</ol>
 
 <p><br /></p>
 
@@ -66,4 +68,38 @@
 <p>We then run the while loop described in the article, knocking down walls between cells, or ignoring if the chosen cell has been visited, until our stack is empty. At this point, our maze is done and should look like this:</p>
 
 <p><img src="/assets/posts/roguelike/002-maze.gif" alt="our generated maze" /></p>
+
+<p><em>as always, full code can be found at my <a href="https://github.com/trithagoras/chasms-cpp">github repository</a></em></p>
+
+<p>At this point, we can guarantee that any two empty spaces on the map are linked by at least one path. It is now time to add rooms.</p>
+
+<p><br /></p>
+
+<h1 id="write-about-adding-rooms-here">WRITE ABOUT ADDING ROOMS HERE</h1>
+
+<p><br /></p>
+
+<h2 id="adding-doorways">Adding Doorways</h2>
+<p>Before adding rooms, we could guarantee that there exists a path between any two spaces on the map. Now, we cannot guarantee that. For example, below shows us a room that even if there was a doorway where the player is, the corridor it connects to is disconnected from the rest of the map.</p>
+
+<p><img src="/assets/posts/roguelike/002-no-doors.png" alt="paths are no longer connected" /></p>
+
+<p>For this, we need to carefully consider how to add doorways such that the map is still fully connected.</p>
+
+<p>For this, Iâ€™ve come up with my own <strong>door-adding algorithm</strong>. Which goes like this:</p>
+
+<ol>
+  <li>Start at some random wall of the room where a door can go and place a door.</li>
+  <li>Move clockwise around the room until another possible doorway is found.
+    <ol>
+      <li>If there exists a path between the old doorway and the new doorway, then repeat from step 2. but pathing from the new doorway instead.</li>
+      <li>Else; check if it can path to any of the other doors
+        <ol>
+          <li>If it can, repeat from step 2.</li>
+          <li>Else; create a door here and repeat from step 2.</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
 :ET

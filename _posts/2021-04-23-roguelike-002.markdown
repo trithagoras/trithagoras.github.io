@@ -12,6 +12,8 @@ Previous part: [001 - Making an ASCII Roguelike in C++](/roguelike-001/)
 
 ## Table of Contents
 1. [Generating the Maze](#generating-the-maze)
+2. [Adding Rooms](#adding-rooms)
+3. [Adding Doorways](#adding-doorways)
 
 <br>
 
@@ -86,3 +88,33 @@ We then run the while loop described in the article, knocking down walls between
 ![our generated maze](/assets/posts/roguelike/002-maze.gif)
 
 *as always, full code can be found at my [github repository](https://github.com/trithagoras/chasms-cpp)*
+
+At this point, we can guarantee that any two empty spaces on the map are linked by at least one path. It is now time to add rooms.
+
+<br>
+
+## Adding Rooms
+
+<br>
+
+## Adding Doorways
+Before adding rooms, we could guarantee that there exists a path between any two spaces on the map. Now, we cannot guarantee that. For example, below shows us a room that even if there was a doorway where the player is, the corridor it connects to is disconnected from the rest of the map.
+
+![paths are no longer connected](/assets/posts/roguelike/002-no-doors.png)
+
+For this, we need to carefully consider how to add doorways such that the map is still fully connected.
+
+For this, I've come up with my own **door-adding algorithm**. Which goes like this:
+
+1. Start at some random wall of the room where a door can go and place a door.
+2. Move clockwise around the room until another possible doorway is found.
+    1. If there exists a path between the old doorway and the new doorway, then repeat from step 2.
+    2. Else; check if it can path to any of the other doors
+        1. If it can, repeat from step 2.
+        1. Else; create a door here and repeat from step 2.
+
+Each time you *repeat from step 2.*, it should be done so that the *old doorway* is set to be the possible doorway given by the last step rather than the chosen doorway from step 1. This is done for efficiency reasons and is not a requirement for the algorithm.
+
+This algorithm should ensure the fewest number of doors while staying connected. Now all we need is an algorithm that can find a path between any two points. Luckily, we have everything set up for us to treat the matrix as a mathematical *graph*, and we can use [depth-first search](https://en.wikipedia.org/wiki/Depth-first_search) to find a path between any two nodes.
+
+We already used randomized depth-first search earlier to generate our maze, and implementing this should be easy.

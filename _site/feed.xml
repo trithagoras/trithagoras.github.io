@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-04-23T16:59:57+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">Roguelike 002 - Floor Generation</title><link href="/roguelike-002/" rel="alternate" type="text/html" title="Roguelike 002 - Floor Generation" /><published>2021-04-23T15:47:00+10:00</published><updated>2021-04-23T15:47:00+10:00</updated><id>/roguelike-002</id><content type="html" xml:base="/roguelike-002/">&lt;p&gt;Previous part: &lt;a href=&quot;/roguelike-001/&quot;&gt;001 - Making an ASCII Roguelike in C++&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-04-23T21:35:58+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">Roguelike 002 - Floor Generation</title><link href="/roguelike-002/" rel="alternate" type="text/html" title="Roguelike 002 - Floor Generation" /><published>2021-04-23T15:47:00+10:00</published><updated>2021-04-23T15:47:00+10:00</updated><id>/roguelike-002</id><content type="html" xml:base="/roguelike-002/">&lt;p&gt;Previous part: &lt;a href=&quot;/roguelike-001/&quot;&gt;001 - Making an ASCII Roguelike in C++&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;table-of-contents&quot;&gt;Table of Contents&lt;/h2&gt;
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;#generating-the-maze&quot;&gt;Generating the Maze&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#adding-rooms&quot;&gt;Adding Rooms&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#adding-doorways&quot;&gt;Adding Doorways&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -69,7 +71,45 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/posts/roguelike/002-maze.gif&quot; alt=&quot;our generated maze&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;as always, full code can be found at my &lt;a href=&quot;https://github.com/trithagoras/chasms-cpp&quot;&gt;github repository&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;</content><author><name>Corey Batchler</name></author><category term="jekyll" /><category term="update" /><summary type="html">Previous part: 001 - Making an ASCII Roguelike in C++</summary></entry><entry><title type="html">Roguelike 001 - Making an ASCII Roguelike in C++</title><link href="/roguelike-001/" rel="alternate" type="text/html" title="Roguelike 001 - Making an ASCII Roguelike in C++" /><published>2021-04-20T20:30:00+10:00</published><updated>2021-04-20T20:30:00+10:00</updated><id>/roguelike-001</id><content type="html" xml:base="/roguelike-001/">&lt;h2 id=&quot;table-of-contents&quot;&gt;Table of Contents&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;as always, full code can be found at my &lt;a href=&quot;https://github.com/trithagoras/chasms-cpp&quot;&gt;github repository&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;At this point, we can guarantee that any two empty spaces on the map are linked by at least one path. It is now time to add rooms.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;adding-rooms&quot;&gt;Adding Rooms&lt;/h2&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;adding-doorways&quot;&gt;Adding Doorways&lt;/h2&gt;
+&lt;p&gt;Before adding rooms, we could guarantee that there exists a path between any two spaces on the map. Now, we cannot guarantee that. For example, below shows us a room that even if there was a doorway where the player is, the corridor it connects to is disconnected from the rest of the map.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/roguelike/002-no-doors.png&quot; alt=&quot;paths are no longer connected&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For this, we need to carefully consider how to add doorways such that the map is still fully connected.&lt;/p&gt;
+
+&lt;p&gt;For this, I’ve come up with my own &lt;strong&gt;door-adding algorithm&lt;/strong&gt;. Which goes like this:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Start at some random wall of the room where a door can go and place a door.&lt;/li&gt;
+  &lt;li&gt;Move clockwise around the room until another possible doorway is found.
+    &lt;ol&gt;
+      &lt;li&gt;If there exists a path between the old doorway and the new doorway, then repeat from step 2.&lt;/li&gt;
+      &lt;li&gt;Else; check if it can path to any of the other doors
+        &lt;ol&gt;
+          &lt;li&gt;If it can, repeat from step 2.&lt;/li&gt;
+          &lt;li&gt;Else; create a door here and repeat from step 2.&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Each time you &lt;em&gt;repeat from step 2.&lt;/em&gt;, it should be done so that the &lt;em&gt;old doorway&lt;/em&gt; is set to be the possible doorway given by the last step rather than the chosen doorway from step 1. This is done for efficiency reasons and is not a requirement for the algorithm.&lt;/p&gt;
+
+&lt;p&gt;This algorithm should ensure the fewest number of doors while staying connected. Now all we need is an algorithm that can find a path between any two points. Luckily, we have everything set up for us to treat the matrix as a mathematical &lt;em&gt;graph&lt;/em&gt;, and we can use &lt;a href=&quot;https://en.wikipedia.org/wiki/Depth-first_search&quot;&gt;depth-first search&lt;/a&gt; to find a path between any two nodes.&lt;/p&gt;
+
+&lt;p&gt;We already used randomized depth-first search earlier to generate our maze, and implementing this should be easy.&lt;/p&gt;</content><author><name>Corey Batchler</name></author><category term="jekyll" /><category term="update" /><summary type="html">Previous part: 001 - Making an ASCII Roguelike in C++</summary></entry><entry><title type="html">Roguelike 001 - Making an ASCII Roguelike in C++</title><link href="/roguelike-001/" rel="alternate" type="text/html" title="Roguelike 001 - Making an ASCII Roguelike in C++" /><published>2021-04-20T20:30:00+10:00</published><updated>2021-04-20T20:30:00+10:00</updated><id>/roguelike-001</id><content type="html" xml:base="/roguelike-001/">&lt;h2 id=&quot;table-of-contents&quot;&gt;Table of Contents&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;#the-motivation&quot;&gt;The Motivation&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#getting-started&quot;&gt;Getting Started&lt;/a&gt;&lt;/li&gt;
