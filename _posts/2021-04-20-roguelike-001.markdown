@@ -24,7 +24,7 @@ Chasms will be written with C++, but do not be deterred. This series tries to av
 
 At the end of part 1, you can expect the game to look like this:
 
-![Gameplay](/assets/001-gameplay.gif)
+![Gameplay](/assets/posts/roguelike/001-gameplay.gif)
 
 <br>
 
@@ -272,4 +272,6 @@ void Game::process_input() {
 
 *Where* `translate` *is a Mob method that translates our x and y values*.
 
-That was the final step. Congratulations! Now, you should have a game in the same state as what was presenting in the above gif. Stay tuned for future parts :)
+That was the final step. Congratulations! Now, you should have a game in the same state as what is presented in the first gif.
+
+Continue to [002 - Floor Generation](/roguelike-002/)

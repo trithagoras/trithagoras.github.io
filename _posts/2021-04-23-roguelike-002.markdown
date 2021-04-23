@@ -1,0 +1,88 @@
+---
+layout: post
+title:  "Roguelike 002 - Floor Generation"
+date:   2021-04-23 15:47:00 +1000
+categories: jekyll update
+permalink: /roguelike-002/
+---
+
+Previous part: [001 - Making an ASCII Roguelike in C++](/roguelike-001/)
+
+<br>
+
+## Table of Contents
+1. [Generating the Maze](#generating-the-maze)
+
+<br>
+
+Welcome to part 002. In this part, we'll discuss how we will randomly generate all the floors in our game. We will accomplish this by running a maze-generator algorithm, and then randomly placing pre-made rooms onto the map.
+
+At the end of the tutorial, our floors should look like this:
+
+CONTENT HERE
+
+<br>
+
+## Generating the Maze
+
+[Randomized depth-first search](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search) is the algorithm we will use to generate our maze. You can read the algorithm steps in the link. I chose to implement it iteratively, as much as I would have liked to implement it recursively, I couldn't wrap my head around a tail-recursive solution, and an otherwise recursive solution would likely overflow the stack. We will get into the implementation steps soon.
+
+The first thing I did was set up randomness in the project. For this, we need to generate a random seed using `srand(time(0))`. I stored this value in a new field `Game::world_seed`, and later in the project, I'd like to implement a way for the player to input a seed and play a dungeon they can predict.
+
+I then began to extend on the `Floor::generate_floor()` static method, where I modified the width and height of the generated floor to:
+
+{% highlight c++ %}
+f.height = 31 + 2 * (rand() % 10);
+f.width = 31 + 2 * (rand() % 10);
+{% endhighlight %}
+
+So that height, width is an odd number in the range $$[31, 49]$$. These limits are arbitrary, so long as they're odd numbers $$> 1$$. This is a requirement for the next step in our maze generation.
+
+Previously, we were completely randomizing our floor terrain in a nested `for` loop. Now, we want to format our grid to look like this:
+
+![Grid pattern](/assets/posts/roguelike/002-empty-grid.png)
+
+To do this, we change our loop to this:
+
+{% highlight c++ %}
+for (int row = 0; row < f.height; row++) {
+    f.terrain.push_back(vector<int>());
+    for (int col = 0; col < f.width; col++) {
+        if (row % 2 == 1 and col % 2 == 1) {
+            f.terrain.at(row).push_back(-1);
+        } else {
+            f.terrain.at(row).push_back(1);
+        }
+    }
+}
+{% endhighlight %}
+
+Where you may expect the value of our *cell* (empty space surrounded by walls) to be 0, it is instead -1. Remembering back to our decision to make this an integer so that we can extend our terrain with potentially many different *variants* of terrain, we can also use the value -1 as an "unvisited flag", meaning when we run our algorithm, it'll check if a cell has been visited (0) or unvisited (-1).
+
+With our now empty grid of cells all marked as unvisited, it is time to run through our algorithm.
+
+As described in the article, we need a stack where we can push / pop cells. For this, I used a deque of tuples of y, x values.
+
+{% highlight c++ %}
+auto d = std::deque<std::tuple<int, int>>();
+{% endhighlight %}
+
+We then need to choose an initial cell,
+
+{% highlight c++ %}
+int ry = 2 * (rand() % (f.height / 3)) + 1;
+int rx = 2 * (rand() % (f.width / 3)) + 1;
+{% endhighlight %}
+
+mark it as empty, and push it to the stack.
+
+{% highlight c++ %}
+f.terrain.at(ry).at(rx) = 0;
+d.push_back(std::tuple<int, int>(ry, rx));
+{% endhighlight %}
+
+We then run the while loop described in the article, knocking down walls between cells, or ignoring if the chosen cell has been visited, until our stack is empty. At this point, our maze is done and should look like this:
+
+![our generated maze](/assets/posts/roguelike/002-maze.gif)
+
+*as always, full code can be found at my [github repository](https://github.com/trithagoras/chasms-cpp)*

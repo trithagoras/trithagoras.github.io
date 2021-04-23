@@ -1,4 +1,4 @@
-I"$g<h2 id="table-of-contents">Table of Contents</h2>
+I"%h<h2 id="table-of-contents">Table of Contents</h2>
 <ul>
   <li><a href="#the-motivation">The Motivation</a></li>
   <li><a href="#getting-started">Getting Started</a></li>
@@ -18,7 +18,7 @@
 
 <p>At the end of part 1, you can expect the game to look like this:</p>
 
-<p><img src="/assets/001-gameplay.gif" alt="Gameplay" /></p>
+<p><img src="/assets/posts/roguelike/001-gameplay.gif" alt="Gameplay" /></p>
 
 <p><br /></p>
 
@@ -72,7 +72,7 @@
 
 <h2 id="the-game-class">The Game Class</h2>
 
-<p>We want to keep track of the player here as well as all the floors. We also want the class to consist of the logic functions, but these do not compose state, they simply act to modify existing state.</p>
+<p>We want to keep track of the player here as well as all the floors and as all of the logic functions.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">Game</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">next_input</span><span class="p">;</span>
@@ -95,7 +95,7 @@
 
 <p>The idea of this class is simple. In <code class="language-plaintext highlighter-rouge">main()</code>, a <code class="language-plaintext highlighter-rouge">Game</code> object will be instantiated and then started using <code class="language-plaintext highlighter-rouge">start()</code>. This method will initialise any other variables, then call the <code class="language-plaintext highlighter-rouge">main_loop()</code> method. The body of this function is the main game loop mentioned earlier, and <code class="language-plaintext highlighter-rouge">update()</code> and <code class="language-plaintext highlighter-rouge">get_input()</code> are shown here.</p>
 
-<p>Before we can get into any of the drawing, we will create the Player class and the Floor class. We will create them as basic as possible for now, and extend them in future tutorials.</p>
+<p>Before we can get into any of the drawing, we will create the <code class="language-plaintext highlighter-rouge">Player</code> class and the <code class="language-plaintext highlighter-rouge">Floor</code> class. We will create them as basic as possible for now, and extend them in future tutorials.</p>
 
 <p><br /></p>
 
@@ -110,14 +110,14 @@
     <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
-<p>Next, we will need an inherited class called the Mob (mobile object). This will act as the base for all monsters, creatures, humanoids, and indeed, the player character. For now, we will create an empty Mob class that simply inherits Entity.</p>
+<p>Next, we will need an inherited class called the <code class="language-plaintext highlighter-rouge">Mob</code> (mobile object). This will act as the base for all monsters, creatures, humanoids, and indeed, the player character. For now, we will create an empty Mob class that simply inherits Entity.</p>
 
-<p>Finally, the Player class can also simply inherit the Mob class with no extra members for now.</p>
+<p>Finally, the Player class can also simply inherit the <code class="language-plaintext highlighter-rouge">Mob</code> class with no extra members for now.</p>
 
 <p><br /></p>
 
 <h2 id="the-floor-class">The Floor Class</h2>
-<p>Chasms takes place within a 25-floor dungeon. As such, the dungeon can entirely be described as an ordered array of 25 instances of a Floor class.</p>
+<p>Chasms takes place within a 25-floor dungeon. As such, the dungeon can entirely be described as an ordered array of 25 instances of a <code class="language-plaintext highlighter-rouge">Floor</code> class.</p>
 
 <p>Indeed, in the Game class above, we have an <code class="language-plaintext highlighter-rouge">std::array&lt;Floor, 25&gt;</code> which describes this.</p>
 
@@ -247,7 +247,9 @@
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p><em>Where <code class="language-plaintext highlighter-rouge">translate</code> is a Mob method that translates our x and y values</em>.</p>
+<p><em>Where</em> <code class="language-plaintext highlighter-rouge">translate</code> <em>is a Mob method that translates our x and y values</em>.</p>
 
-<p>That was the final step. Congratulations! Now, you should have a game in the same state as what was presenting in the above gif. Stay tuned for future parts :)</p>
+<p>That was the final step. Congratulations! Now, you should have a game in the same state as what is presented in the first gif.</p>
+
+<p>Continue to <a href="/roguelike-002/">002 - Floor Generation</a></p>
 :ET

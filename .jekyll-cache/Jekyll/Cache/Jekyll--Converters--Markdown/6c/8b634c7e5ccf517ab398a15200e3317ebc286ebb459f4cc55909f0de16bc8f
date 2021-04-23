@@ -1,0 +1,32 @@
+I"<p>Previous part: <a href="/roguelike-001/">001 - Making an ASCII Roguelike in C++</a></p>
+
+<p><br /></p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+<p>pass</p>
+
+<p><br /></p>
+
+<p>Welcome to part 002. In this part, we’ll discuss how we will randomly generate all the floors in our game. We will accomplish this by running a maze-generator algorithm, and then randomly placing pre-made rooms onto the map.</p>
+
+<p>At the end of the tutorial, our floors should look like this:</p>
+
+<p>CONTENT HERE</p>
+
+<p><br /></p>
+
+<h2 id="generating-the-maze">Generating the Maze</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search">Randomized depth-first search</a> is the algorithm we will use to generate our maze. You can read the algorithm steps in the link. I chose to implement it iteratively, as much as I would have liked to implement it recursively, I couldn’t wrap my head around a tail-recursive solution, and an otherwise recursive solution would likely overflow the stack. We will get into the implementation steps soon.</p>
+
+<p>The first thing I did was set up randomness in the project. For this, we need to generate a random seed using <code class="language-plaintext highlighter-rouge">srand(time(0))</code>. I stored this value in a new field <code class="language-plaintext highlighter-rouge">Game::world_seed</code>, and later in the project, I’d like to implement a way for the player to input a seed and play a dungeon they can predict.</p>
+
+<p>I then began to extend on the <code class="language-plaintext highlighter-rouge">Floor::generate_floor()</code> static method, where I modified the width and height of the generated floor to:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">f</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="mi">31</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10</span><span class="p">);</span>
+<span class="n">f</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">31</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10</span><span class="p">);</span></code></pre></figure>
+
+<p>So that height, width is an odd number in the range \([31, 49]\). These limits are arbitrary, so long as they’re odd numbers \(&gt; 1\). This is a requirement for the next step in our maze generation explained below.</p>
+
+<p><img src="/assets/posts/roguelike/002-empty-grid.png" alt="Grid pattern" /></p>
+:ET
