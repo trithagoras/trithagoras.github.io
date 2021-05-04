@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-04T18:49:29+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega328p&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-04T21:11:27+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega328p&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -17,12 +17,12 @@
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;makefile&quot;&gt;MakeFile&lt;/h2&gt;
-&lt;p&gt;Now, we can make a MakeFile.&lt;/p&gt;
+&lt;h2 id=&quot;makefile&quot;&gt;Makefile&lt;/h2&gt;
+&lt;p&gt;Now, we can make a Makefile.&lt;/p&gt;
 
 &lt;p&gt;I modified a well crafted MakeFile retrieved from &lt;a href=&quot;https://gist.github.com/holachek/3304890&quot;&gt;HolaCheck’s Github&lt;/a&gt; into working with my configuration (using the &lt;strong&gt;atmega328p&lt;/strong&gt;). My final MakeFile can be found at &lt;a href=&quot;https://pastebin.com/ENDP4XES&quot;&gt;this pastebin&lt;/a&gt; or at the bottom of the page.&lt;/p&gt;
 
-&lt;p&gt;The MakeFile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.&lt;/p&gt;
+&lt;p&gt;The Makefile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;
     &lt;p&gt;It should be clear that the variable &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OBJECTS&lt;/code&gt; is the list of compiled source files to be included.&lt;/p&gt;
@@ -31,7 +31,7 @@
     &lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PORT&lt;/code&gt; variable can be found by running &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$ ls /dev/cu.*&lt;/code&gt;. You should find two devices in the format of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cu.usbmodem002042642&lt;/code&gt;. Typically, the lower number is the programmer port and is the one that should be assigned to our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PORT&lt;/code&gt; variable.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;When &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$ make install&lt;/code&gt; runs, you may see &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fuses OK (E:FF, H:D1, L:E6)&lt;/code&gt; appear from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avrdude&lt;/code&gt; or some variation. You can match these fuse values in the MakeFile. For example, we can deduce that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-U hfuse:w:0xd1:m&lt;/code&gt; in the MakeFile refers to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;H:d1&lt;/code&gt; fuse. If your fuses are different, update them in the MakeFile.&lt;/p&gt;
+    &lt;p&gt;When &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$ make install&lt;/code&gt; runs, you may see &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fuses OK (E:FF, H:D1, L:E6)&lt;/code&gt; appear from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avrdude&lt;/code&gt; or some variation. You can match these fuse values in the Makefile. For example, we can deduce that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-U hfuse:w:0xd1:m&lt;/code&gt; in the Makefile refers to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;H:d1&lt;/code&gt; fuse. If your fuses are different, update them in the Makefile.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -58,17 +58,15 @@
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;Now, we simply run the commands in the directory (with our arduino plugged in, of course).&lt;/p&gt;
+&lt;p&gt;Now, we simply run the command in the directory (with our arduino plugged in, of course).&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make clean
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;And our program should have flashed to the arduino and should be working.&lt;/p&gt;
+&lt;p&gt;And our program should have flashed to the arduino and should be immediately working.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;MakeFile&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Makefile&lt;/strong&gt;&lt;/p&gt;
 &lt;details&gt;
   &lt;summary&gt;Click to expand&lt;/summary&gt;
 

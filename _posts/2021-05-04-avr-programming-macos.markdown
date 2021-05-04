@@ -25,17 +25,17 @@ $ brew install avrdude
 
 <br>
 
-## MakeFile
-Now, we can make a MakeFile.
+## Makefile
+Now, we can make a Makefile.
 
 I modified a well crafted MakeFile retrieved from [HolaCheck's Github](https://gist.github.com/holachek/3304890) into working with my configuration (using the **atmega328p**). My final MakeFile can be found at [this pastebin](https://pastebin.com/ENDP4XES) or at the bottom of the page.
 
-The MakeFile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.
+The Makefile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.
   - It should be clear that the variable `OBJECTS` is the list of compiled source files to be included.
 
   - The `PORT` variable can be found by running `$ ls /dev/cu.*`. You should find two devices in the format of `cu.usbmodem002042642`. Typically, the lower number is the programmer port and is the one that should be assigned to our `PORT` variable.
 
-  - When `$ make install` runs, you may see `Fuses OK (E:FF, H:D1, L:E6)` appear from `avrdude` or some variation. You can match these fuse values in the MakeFile. For example, we can deduce that the `-U hfuse:w:0xd1:m` in the MakeFile refers to the `H:d1` fuse. If your fuses are different, update them in the MakeFile.
+  - When `$ make install` runs, you may see `Fuses OK (E:FF, H:D1, L:E6)` appear from `avrdude` or some variation. You can match these fuse values in the Makefile. For example, we can deduce that the `-U hfuse:w:0xd1:m` in the Makefile refers to the `H:d1` fuse. If your fuses are different, update them in the Makefile.
 
 
 <br>
@@ -63,19 +63,17 @@ int main() {
 <br>
 
 ## Conclusion
-Now, we simply run the commands in the directory (with our arduino plugged in, of course).
+Now, we simply run the command in the directory (with our arduino plugged in, of course).
 
 {% highlight bash %}
-$ make clean
-$ make
 $ make install
 {% endhighlight %}
 
-And our program should have flashed to the arduino and should be working.
+And our program should have flashed to the arduino and should be immediately working.
 
 <br>
 
-**MakeFile**
+**Makefile**
 <details>
   <summary>Click to expand</summary>
 
