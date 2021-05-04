@@ -1,4 +1,157 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-04-23T21:35:58+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">Roguelike 002 - Floor Generation</title><link href="/roguelike-002/" rel="alternate" type="text/html" title="Roguelike 002 - Floor Generation" /><published>2021-04-23T15:47:00+10:00</published><updated>2021-04-23T15:47:00+10:00</updated><id>/roguelike-002</id><content type="html" xml:base="/roguelike-002/">&lt;p&gt;Previous part: &lt;a href=&quot;/roguelike-001/&quot;&gt;001 - Making an ASCII Roguelike in C++&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-04T18:49:29+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega328p&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
+&lt;p&gt;For this, you are required to have installed:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avr-gcc&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avrdude&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A great set of commands to install these with &lt;a href=&quot;https://brew.sh&quot;&gt;Homebrew&lt;/a&gt; can be found &lt;a href=&quot;https://gist.github.com/jj1bdx/f149305a57c4cb2cef7c&quot;&gt;here&lt;/a&gt;. In case this page is not available anymore, they are:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew tap osx-cross/avr
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;avr-gcc avr-binutils
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;avrdude&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;makefile&quot;&gt;MakeFile&lt;/h2&gt;
+&lt;p&gt;Now, we can make a MakeFile.&lt;/p&gt;
+
+&lt;p&gt;I modified a well crafted MakeFile retrieved from &lt;a href=&quot;https://gist.github.com/holachek/3304890&quot;&gt;HolaCheck’s Github&lt;/a&gt; into working with my configuration (using the &lt;strong&gt;atmega328p&lt;/strong&gt;). My final MakeFile can be found at &lt;a href=&quot;https://pastebin.com/ENDP4XES&quot;&gt;this pastebin&lt;/a&gt; or at the bottom of the page.&lt;/p&gt;
+
+&lt;p&gt;The MakeFile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;It should be clear that the variable &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OBJECTS&lt;/code&gt; is the list of compiled source files to be included.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PORT&lt;/code&gt; variable can be found by running &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$ ls /dev/cu.*&lt;/code&gt;. You should find two devices in the format of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cu.usbmodem002042642&lt;/code&gt;. Typically, the lower number is the programmer port and is the one that should be assigned to our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PORT&lt;/code&gt; variable.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;When &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$ make install&lt;/code&gt; runs, you may see &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fuses OK (E:FF, H:D1, L:E6)&lt;/code&gt; appear from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avrdude&lt;/code&gt; or some variation. You can match these fuse values in the MakeFile. For example, we can deduce that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-U hfuse:w:0xd1:m&lt;/code&gt; in the MakeFile refers to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;H:d1&lt;/code&gt; fuse. If your fuses are different, update them in the MakeFile.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;test-program&quot;&gt;Test Program&lt;/h2&gt;
+&lt;p&gt;Next, we can make a test program. This program simply outputs a pulse signal through PD1 with delays.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main.c&lt;/code&gt;:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;avr/io.h&amp;gt;
+#include &amp;lt;util/delay.h&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DDRD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// set LED pin PD1 to output&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;PORTD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// drive PD1 high&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;_delay_ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;PORTD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// drive PD1 low&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;_delay_ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Now, we simply run the commands in the directory (with our arduino plugged in, of course).&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make clean
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And our program should have flashed to the arduino and should be working.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;MakeFile&lt;/strong&gt;&lt;/p&gt;
+&lt;details&gt;
+  &lt;summary&gt;Click to expand&lt;/summary&gt;
+
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-make&quot; data-lang=&quot;make&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Name: Makefile
+# Author: &amp;lt;insert your name here&amp;gt;
+# Copyright: &amp;lt;insert your copyright message here&amp;gt;
+# License: &amp;lt;insert your license reference here&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# DEVICE ....... The AVR device you compile for
+# CLOCK ........ Target AVR clock rate in Hertz
+# OBJECTS ...... The object files created from your source files. This list is
+#                usually the same as the list of source files with suffix &quot;.o&quot;.
+# PROGRAMMER ... Options to avrdude which define the hardware you use for
+#                uploading to the AVR and the interface where this hardware
+#                is connected.
+# FUSES ........ Parameters for avrdude to flash the fuses appropriately.
+&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DEVICE&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; atmega328p
+&lt;span class=&quot;nv&quot;&gt;CLOCK&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 20000000
+&lt;span class=&quot;nv&quot;&gt;PORT&lt;/span&gt;	   &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /dev/cu.usbmodem002042642
+&lt;span class=&quot;nv&quot;&gt;PROGRAMMER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; stk500v2 &lt;span class=&quot;nt&quot;&gt;-P&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(PORT)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;OBJECTS&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; main.o other.o
+&lt;span class=&quot;nv&quot;&gt;FUSES&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; lfuse:w:0xE6:m &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; hfuse:w:0xd1:m &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; efuse:w:0xff:m
+
+
+&lt;span class=&quot;c&quot;&gt;######################################################################
+######################################################################
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Tune the lines below only if you know what you are doing:
+&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;AVRDUDE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; avrdude &lt;span class=&quot;nv&quot;&gt;$(PROGRAMMER)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(DEVICE)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;COMPILE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; avr-gcc &lt;span class=&quot;nt&quot;&gt;-Wall&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-Os&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-DF_CPU&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$(CLOCK)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-mmcu&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$(DEVICE)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# symbolic targets:
+&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;	&lt;span class=&quot;nf&quot;&gt;main.hex&lt;/span&gt;
+
+&lt;span class=&quot;nl&quot;&gt;.c.o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(COMPILE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$&amp;lt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;
+
+&lt;span class=&quot;nl&quot;&gt;.S.o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(COMPILE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; assembler-with-cpp &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$&amp;lt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# &quot;-x assembler-with-cpp&quot; should not be necessary since this is the default
+# file type for the .S (with capital S) extension. However, upper case
+# characters are not always preserved on Windows. To ensure WinAVR
+# compatibility define the file type manually.
+&lt;/span&gt;
+&lt;span class=&quot;nl&quot;&gt;.c.s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(COMPILE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$&amp;lt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;
+
+&lt;span class=&quot;nl&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;	&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(AVRDUDE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; flash:w:main.hex:i &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt;
+
+&lt;span class=&quot;nl&quot;&gt;fuse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(AVRDUDE)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(FUSES)&lt;/span&gt;
+
+&lt;span class=&quot;nl&quot;&gt;install&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;flash fuse&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# if you use a bootloader, change the command below appropriately:
+&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
+	bootloadHID main.hex
+
+&lt;span class=&quot;nl&quot;&gt;clean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; main.hex main.elf &lt;span class=&quot;nv&quot;&gt;$(OBJECTS)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# file targets:
+&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;main.elf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;$(OBJECTS)&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(COMPILE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; main.elf &lt;span class=&quot;nv&quot;&gt;$(OBJECTS)&lt;/span&gt;
+
+&lt;span class=&quot;nl&quot;&gt;main.hex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main.elf&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; main.hex
+	avr-objcopy &lt;span class=&quot;nt&quot;&gt;-j&lt;/span&gt; .text &lt;span class=&quot;nt&quot;&gt;-j&lt;/span&gt; .data &lt;span class=&quot;nt&quot;&gt;-O&lt;/span&gt; ihex main.elf main.hex
+&lt;span class=&quot;c&quot;&gt;# If you have an EEPROM section, you must also create a hex file for the
+# EEPROM and add it to the &quot;flash&quot; target.
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Targets for code debugging and analysis:
+&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;disasm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;	&lt;span class=&quot;nf&quot;&gt;main.elf&lt;/span&gt;
+	avr-objdump &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; main.elf
+
+&lt;span class=&quot;nl&quot;&gt;cpp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(COMPILE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-E&lt;/span&gt; main.c&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;/details&gt;</content><author><name>Corey Batchler</name></author><category term="jekyll" /><category term="update" /><summary type="html">For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the Microchip Studio (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the atmega328p specifically for MacOS.</summary></entry><entry><title type="html">Roguelike 002 - Floor Generation</title><link href="/roguelike-002/" rel="alternate" type="text/html" title="Roguelike 002 - Floor Generation" /><published>2021-04-23T15:47:00+10:00</published><updated>2021-04-23T15:47:00+10:00</updated><id>/roguelike-002</id><content type="html" xml:base="/roguelike-002/">&lt;p&gt;Previous part: &lt;a href=&quot;/roguelike-001/&quot;&gt;001 - Making an ASCII Roguelike in C++&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -78,6 +231,64 @@
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;adding-rooms&quot;&gt;Adding Rooms&lt;/h2&gt;
+&lt;p&gt;The way I’ve decided I’ll implement rooms is by having a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;maps.json&lt;/code&gt; file that will contain predefined rooms by size which will simply encode terrain data. Later in the project, maps will ideally encode data such as secret rooms, items, and mob spawns.&lt;/p&gt;
+
+&lt;p&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;maps.json&lt;/code&gt; file will not be included in the compilation, but rather, should be included alongside the compilation and read from at runtime, so that modders can easily add new rooms.&lt;/p&gt;
+
+&lt;p&gt;I will also allow &lt;em&gt;basic&lt;/em&gt; rooms of random size to be computed, where a basic room is an empty room surrounded by walls.&lt;/p&gt;
+
+&lt;p&gt;Then, after the maze has been generated, random rooms will be both chosen from our file or computed with our instructions, and scattered across the map, overwriting the terrain that’s already there.&lt;/p&gt;
+
+&lt;p&gt;In order to read &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;maps.json&lt;/code&gt;, we’ll need to use a third-party library that can do this. For this project, we’ll be using &lt;a href=&quot;https://github.com/nlohmann/json&quot;&gt;Nlohmann JSON&lt;/a&gt;, which is a very popular JSON library.&lt;/p&gt;
+
+&lt;p&gt;To include this library (MacOS instructions), I used the package manager &lt;a href=&quot;https://brew.sh&quot;&gt;Homebrew&lt;/a&gt; and ran the commands:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew tap nlohmann/json
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;nlohmann-json&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;and added the following lines to my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMakeLists.txt&lt;/code&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cmake&quot; data-lang=&quot;cmake&quot;&gt;&lt;span class=&quot;nb&quot;&gt;find_package&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;nlohmann_json 3.2.0 REQUIRED&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;target_link_libraries&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;chasms PRIVATE nlohmann_json::nlohmann_json&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;and finally, as a convenience, where I’ll be using the library, I’ve written:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nlohmann&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;of course, there are many ways to include the library, and all of which are present at the github repository linked above.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that we have the JSON reader, we should create our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;maps.json&lt;/code&gt;.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;maps&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;height&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;width&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;map&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# # # # #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . . . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . # . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . . . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# # # # #&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;height&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;width&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;map&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# # # # # #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . . . . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . # # . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . # # . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# . . . . #&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;# # # # # #&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This is the contents of our file for now which can be extended at any time. Just place this in a subdirectory &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/assets/&lt;/code&gt; within the output directory.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 

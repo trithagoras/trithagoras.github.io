@@ -94,6 +94,72 @@ At this point, we can guarantee that any two empty spaces on the map are linked 
 <br>
 
 ## Adding Rooms
+The way I've decided I'll implement rooms is by having a `maps.json` file that will contain predefined rooms by size which will simply encode terrain data. Later in the project, maps will ideally encode data such as secret rooms, items, and mob spawns.
+
+This `maps.json` file will not be included in the compilation, but rather, should be included alongside the compilation and read from at runtime, so that modders can easily add new rooms.
+
+I will also allow *basic* rooms of random size to be computed, where a basic room is an empty room surrounded by walls.
+
+Then, after the maze has been generated, random rooms will be both chosen from our file or computed with our instructions, and scattered across the map, overwriting the terrain that's already there.
+
+In order to read `maps.json`, we'll need to use a third-party library that can do this. For this project, we'll be using [Nlohmann JSON](https://github.com/nlohmann/json), which is a very popular JSON library.
+
+To include this library (MacOS instructions), I used the package manager [Homebrew](https://brew.sh) and ran the commands:
+
+{% highlight bash %}
+$ brew tap nlohmann/json
+$ brew install nlohmann-json
+{% endhighlight %}
+
+and added the following lines to my `CMakeLists.txt`
+
+{% highlight cmake %}
+find_package(nlohmann_json 3.2.0 REQUIRED)
+target_link_libraries(chasms PRIVATE nlohmann_json::nlohmann_json)
+{% endhighlight %}
+
+and finally, as a convenience, where I'll be using the library, I've written:
+
+{% highlight c++ %}
+using json = nlohmann::json;
+{% endhighlight %}
+
+*of course, there are many ways to include the library, and all of which are present at the github repository linked above.*
+
+Now that we have the JSON reader, we should create our `maps.json`.
+
+{% highlight json %}
+{
+    "maps": [
+        {
+            "height": 5,
+            "width": 5,
+            "map": [
+                "# # # # #",
+                "# . . . #",
+                "# . # . #",
+                "# . . . #",
+                "# # # # #"
+            ]
+        },
+
+        {
+            "height": 6,
+            "width": 6,
+            "map": [
+                "# # # # # #",
+                "# . . . . #",
+                "# . # # . #",
+                "# . # # . #",
+                "# . . . . #",
+                "# # # # # #"
+            ]
+        }
+    ]
+}
+{% endhighlight %}
+
+This is the contents of our file for now which can be extended at any time. Just place this in a subdirectory `/assets/` within the output directory.
 
 <br>
 

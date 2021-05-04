@@ -1,10 +1,12 @@
-I"�)<p>Previous part: <a href="/roguelike-001/">001 - Making an ASCII Roguelike in C++</a></p>
+I"|C<p>Previous part: <a href="/roguelike-001/">001 - Making an ASCII Roguelike in C++</a></p>
 
 <p><br /></p>
 
 <h2 id="table-of-contents">Table of Contents</h2>
 <ol>
   <li><a href="#generating-the-maze">Generating the Maze</a></li>
+  <li><a href="#adding-rooms">Adding Rooms</a></li>
+  <li><a href="#adding-doorways">Adding Doorways</a></li>
 </ol>
 
 <p><br /></p>
@@ -75,7 +77,65 @@
 
 <p><br /></p>
 
-<h1 id="write-about-adding-rooms-here">WRITE ABOUT ADDING ROOMS HERE</h1>
+<h2 id="adding-rooms">Adding Rooms</h2>
+<p>The way I’ve decided I’ll implement rooms is by having a <code class="language-plaintext highlighter-rouge">maps.json</code> file that will contain predefined rooms by size which will simply encode terrain data. Later in the project, maps will ideally encode data such as secret rooms, items, and mob spawns.</p>
+
+<p>This <code class="language-plaintext highlighter-rouge">maps.json</code> file will not be included in the compilation, but rather, should be included alongside the compilation and read from at runtime, so that modders can easily add new rooms.</p>
+
+<p>I will also allow <em>basic</em> rooms of random size to be computed, where a basic room is an empty room surrounded by walls.</p>
+
+<p>Then, after the maze has been generated, random rooms will be both chosen from our file or computed with our instructions, and scattered across the map, overwriting the terrain that’s already there.</p>
+
+<p>In order to read <code class="language-plaintext highlighter-rouge">maps.json</code>, we’ll need to use a third-party library that can do this. For this project, we’ll be using <a href="https://github.com/nlohmann/json">Nlohmann JSON</a>, which is a very popular JSON library.</p>
+
+<p>To include this library (MacOS instructions), I used the package manager <a href="https://brew.sh">Homebrew</a> and ran the commands:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew tap nlohmann/json
+<span class="nv">$ </span>brew <span class="nb">install </span>nlohmann-json</code></pre></figure>
+
+<p>and added the following lines to my <code class="language-plaintext highlighter-rouge">CMakeLists.txt</code></p>
+
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">find_package</span><span class="p">(</span>nlohmann_json 3.2.0 REQUIRED<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>chasms PRIVATE nlohmann_json::nlohmann_json<span class="p">)</span></code></pre></figure>
+
+<p>and finally, as a convenience, where I’ll be using the library, I’ve written:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">using</span> <span class="n">json</span> <span class="o">=</span> <span class="n">nlohmann</span><span class="o">::</span><span class="n">json</span><span class="p">;</span></code></pre></figure>
+
+<p><em>of course, there are many ways to include the library, and all of which are present at the github repository linked above.</em></p>
+
+<p>Now that we have the JSON reader, we should create our <code class="language-plaintext highlighter-rouge">maps.json</code>.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"maps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"map"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"# # # # #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . . . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . # . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . . . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# # # # #"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"map"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"# # # # # #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . . . . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . # # . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . # # . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# . . . . #"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"# # # # # #"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>This is the contents of our file for now which can be extended at any time. Just place this in a subdirectory <code class="language-plaintext highlighter-rouge">/assets/</code> within the output directory.</p>
 
 <p><br /></p>
 
@@ -92,9 +152,20 @@
   <li>Start at some random wall of the room where a door can go and place a door.</li>
   <li>Move clockwise around the room until another possible doorway is found.
     <ol>
-      <li>If there exists a path between the old doorway and the new doorway, then repeat from step 2. but pathing from the new doorway instead.</li>
-      <li>Else; create a door here and repeat from step 2.</li>
+      <li>If there exists a path between the old doorway and the new doorway, then repeat from step 2.</li>
+      <li>Else; check if it can path to any of the other doors
+        <ol>
+          <li>If it can, repeat from step 2.</li>
+          <li>Else; create a door here and repeat from step 2.</li>
+        </ol>
+      </li>
     </ol>
   </li>
 </ol>
+
+<p>Each time you <em>repeat from step 2.</em>, it should be done so that the <em>old doorway</em> is set to be the possible doorway given by the last step rather than the chosen doorway from step 1. This is done for efficiency reasons and is not a requirement for the algorithm.</p>
+
+<p>This algorithm should ensure the fewest number of doors while staying connected. Now all we need is an algorithm that can find a path between any two points. Luckily, we have everything set up for us to treat the matrix as a mathematical <em>graph</em>, and we can use <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first search</a> to find a path between any two nodes.</p>
+
+<p>We already used randomized depth-first search earlier to generate our maze, and implementing this should be easy.</p>
 :ET
