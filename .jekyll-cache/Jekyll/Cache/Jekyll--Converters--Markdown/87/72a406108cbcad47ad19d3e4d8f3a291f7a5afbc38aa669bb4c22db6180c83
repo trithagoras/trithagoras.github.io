@@ -1,4 +1,4 @@
-I"@(<p>For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the <a href="https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices">Microchip Studio</a> (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the <strong>atmega328p</strong> specifically for MacOS.</p>
+I"85<p>For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the <a href="https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices">Microchip Studio</a> (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the <strong>atmega324a</strong> specifically for MacOS.</p>
 
 <p><br /></p>
 
@@ -20,7 +20,7 @@
 <h2 id="makefile">Makefile</h2>
 <p>Now, we can make a Makefile.</p>
 
-<p>I modified a well crafted MakeFile retrieved from <a href="https://gist.github.com/holachek/3304890">HolaCheck’s Github</a> into working with my configuration (using the <strong>atmega328p</strong>). My final MakeFile can be found at <a href="https://pastebin.com/ENDP4XES">this pastebin</a> or at the bottom of the page.</p>
+<p>I modified a well crafted MakeFile retrieved from <a href="https://gist.github.com/holachek/3304890">HolaCheck’s Github</a> into working with my configuration (using the <strong>atmega324a</strong>). My final MakeFile can be found at <a href="https://pastebin.com/ENDP4XES">this pastebin</a> or at the bottom of the page.</p>
 
 <p>The Makefile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.</p>
 <ul>
@@ -57,12 +57,60 @@
 
 <p><br /></p>
 
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="testing">Testing</h2>
 <p>Now, we simply run the command in the directory (with our arduino plugged in, of course).</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>make <span class="nb">install</span></code></pre></figure>
 
 <p>And our program should have flashed to the arduino and should be immediately working.</p>
+
+<p><br /></p>
+
+<h2 id="serial-communication">Serial Communication</h2>
+<p>As a final note, there will often be serial communication involved in your project. First, you need to know the serial port to communicate with.</p>
+
+<p>Following the same trick we used to find the programming port, we can check with <code class="language-plaintext highlighter-rouge">ls /dev/cu.*</code> to find the serial port. In my case, it looked like this:</p>
+
+<p><code class="language-plaintext highlighter-rouge">/dev/cu.usbserial-DA7WKGD</code></p>
+
+<p>Then, knowing the communication speed (in my case, 19200), we can run:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>screen /dev/cu.usbserial-DA7WKGD 19200</code></pre></figure>
+
+<p>and it should work perfect.</p>
+
+<p>You should note that sometimes you may get the errors that the port is busy for R/W. This can be solved by closing all <code class="language-plaintext highlighter-rouge">screen</code> processes in Activity Monitor, or by unplugging and replugging the USB.</p>
+
+<p><br /></p>
+
+<h2 id="potential-errors">Potential Errors</h2>
+<p>Ultimately, I was able to deduce this by reading from many different sources and filling in the blanks with an admittedly limited understanding.</p>
+
+<p>Because of this, there are potentially many errors that could arise, though I haven’t encountered any of them yet.</p>
+
+<h3 id="problem-1">Problem 1</h3>
+<p>As of writing this, <code class="language-plaintext highlighter-rouge">avrdude</code> does not support the <strong>atmega324a</strong>. To get around this, I made it so that <code class="language-plaintext highlighter-rouge">avrdude</code> is using the device <code class="language-plaintext highlighter-rouge">atmega328p</code>, while keeping the <code class="language-plaintext highlighter-rouge">-mmcu</code> flag in <code class="language-plaintext highlighter-rouge">avr-gcc</code> as <code class="language-plaintext highlighter-rouge">atmega324a</code>.</p>
+
+<p>As a consequence of this, every time I run <code class="language-plaintext highlighter-rouge">make install</code>, I get the response <code class="language-plaintext highlighter-rouge">make: *** [fuse] Error 1</code> and</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">avrdude: Device signature <span class="o">=</span> 0x1e9515
+avrdude: Expected signature <span class="k">for </span>ATmega328P is 1E 95 0F</code></pre></figure>
+
+<p>Though the program should still flash correctly.</p>
+
+<h3 id="problem-2">Problem 2</h3>
+<p>In my class, we were supplied a source file that would not compile with <code class="language-plaintext highlighter-rouge">avr-gcc</code> using my configuration. The errors were to do with some defined macros such as:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">SPCR0</span>
+<span class="n">SPSR0</span>
+<span class="n">SPR00</span>
+<span class="n">SPR10</span>
+<span class="n">SPDR0</span>
+<span class="n">SPIF0</span>
+<span class="n">SPSR0</span>
+  </code></pre></figure>
+
+<p>For this, I simply removed the postfixed <code class="language-plaintext highlighter-rouge">0</code> for each of these macros, and it compiled and flashed fine. As of now, I do not know the full consequences of this.</p>
 
 <p><br /></p>
 

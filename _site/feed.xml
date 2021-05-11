@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-11T13:41:37+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega328p&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-11T14:19:18+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega324a&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -20,7 +20,7 @@
 &lt;h2 id=&quot;makefile&quot;&gt;Makefile&lt;/h2&gt;
 &lt;p&gt;Now, we can make a Makefile.&lt;/p&gt;
 
-&lt;p&gt;I modified a well crafted MakeFile retrieved from &lt;a href=&quot;https://gist.github.com/holachek/3304890&quot;&gt;HolaCheck’s Github&lt;/a&gt; into working with my configuration (using the &lt;strong&gt;atmega328p&lt;/strong&gt;). My final MakeFile can be found at &lt;a href=&quot;https://pastebin.com/ENDP4XES&quot;&gt;this pastebin&lt;/a&gt; or at the bottom of the page.&lt;/p&gt;
+&lt;p&gt;I modified a well crafted MakeFile retrieved from &lt;a href=&quot;https://gist.github.com/holachek/3304890&quot;&gt;HolaCheck’s Github&lt;/a&gt; into working with my configuration (using the &lt;strong&gt;atmega324a&lt;/strong&gt;). My final MakeFile can be found at &lt;a href=&quot;https://pastebin.com/wKndwk0w&quot;&gt;this pastebin&lt;/a&gt; or at the bottom of the page.&lt;/p&gt;
 
 &lt;p&gt;The Makefile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.&lt;/p&gt;
 &lt;ul&gt;
@@ -83,6 +83,40 @@
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
+&lt;h2 id=&quot;potential-errors&quot;&gt;Potential Errors&lt;/h2&gt;
+&lt;p&gt;Ultimately, I was able to deduce this by reading from many different sources and filling in the blanks with an admittedly limited understanding.&lt;/p&gt;
+
+&lt;p&gt;Because of this, there are potentially many errors that could arise, though I haven’t encountered any of them yet.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-1&quot;&gt;Problem 1&lt;/h3&gt;
+&lt;p&gt;As of writing this, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avrdude&lt;/code&gt; does not support the &lt;strong&gt;atmega324a&lt;/strong&gt;. To get around this, I made it so that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avrdude&lt;/code&gt; is using the device &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atmega328p&lt;/code&gt;, while keeping the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-mmcu&lt;/code&gt; flag in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avr-gcc&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atmega324a&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;As a consequence of this, every time I run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;make install&lt;/code&gt;, I get the response &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;make: *** [fuse] Error 1&lt;/code&gt; and&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;avrdude: Device signature &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0x1e9515
+avrdude: Expected signature &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;ATmega328P is 1E 95 0F&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Though the program should still flash correctly.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-2&quot;&gt;Problem 2&lt;/h3&gt;
+&lt;p&gt;In my class, we were supplied a source file that would not compile with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;avr-gcc&lt;/code&gt; using my configuration. The errors were to do with some defined macros such as:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;n&quot;&gt;SPCR0&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPSR0&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPR00&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPR10&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPDR0&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPIF0&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPSR0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;For this, I simply removed the postfixed &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; for each of these macros, and it compiled and flashed fine. As of now, I do not know the full consequences of this.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
 &lt;p&gt;&lt;strong&gt;Makefile&lt;/strong&gt;&lt;/p&gt;
 &lt;details&gt;
   &lt;summary&gt;Click to expand&lt;/summary&gt;
@@ -102,8 +136,9 @@
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 &lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DEVICE&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; atmega328p
-&lt;span class=&quot;nv&quot;&gt;CLOCK&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 20000000
+&lt;span class=&quot;nv&quot;&gt;DEVICE&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; atmega324a
+&lt;span class=&quot;nv&quot;&gt;AVRDUDEDEV&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; atmega328p
+&lt;span class=&quot;nv&quot;&gt;CLOCK&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 8000000
 &lt;span class=&quot;nv&quot;&gt;PORT&lt;/span&gt;	   &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /dev/cu.usbmodem002042642
 &lt;span class=&quot;nv&quot;&gt;PROGRAMMER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; stk500v2 &lt;span class=&quot;nt&quot;&gt;-P&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(PORT)&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;OBJECTS&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; main.o other.o
@@ -115,7 +150,7 @@
 &lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# Tune the lines below only if you know what you are doing:
 &lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;AVRDUDE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; avrdude &lt;span class=&quot;nv&quot;&gt;$(PROGRAMMER)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(DEVICE)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;AVRDUDE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; avrdude &lt;span class=&quot;nv&quot;&gt;$(PROGRAMMER)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(AVRDUDEDEV)&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;COMPILE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; avr-gcc &lt;span class=&quot;nt&quot;&gt;-Wall&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-Os&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-DF_CPU&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$(CLOCK)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-mmcu&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$(DEVICE)&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# symbolic targets:
@@ -166,7 +201,7 @@
 &lt;span class=&quot;nl&quot;&gt;cpp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
 	&lt;span class=&quot;nv&quot;&gt;$(COMPILE)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-E&lt;/span&gt; main.c&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;/details&gt;</content><author><name>Corey Batchler</name></author><category term="jekyll" /><category term="update" /><summary type="html">For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the Microchip Studio (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the atmega328p specifically for MacOS.</summary></entry><entry><title type="html">Roguelike 002 - Floor Generation</title><link href="/roguelike-002/" rel="alternate" type="text/html" title="Roguelike 002 - Floor Generation" /><published>2021-04-23T15:47:00+10:00</published><updated>2021-04-23T15:47:00+10:00</updated><id>/roguelike-002</id><content type="html" xml:base="/roguelike-002/">&lt;p&gt;Previous part: &lt;a href=&quot;/roguelike-001/&quot;&gt;001 - Making an ASCII Roguelike in C++&lt;/a&gt;&lt;/p&gt;
+&lt;/details&gt;</content><author><name>Corey Batchler</name></author><category term="jekyll" /><category term="update" /><summary type="html">For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the Microchip Studio (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the atmega324a specifically for MacOS.</summary></entry><entry><title type="html">Roguelike 002 - Floor Generation</title><link href="/roguelike-002/" rel="alternate" type="text/html" title="Roguelike 002 - Floor Generation" /><published>2021-04-23T15:47:00+10:00</published><updated>2021-04-23T15:47:00+10:00</updated><id>/roguelike-002</id><content type="html" xml:base="/roguelike-002/">&lt;p&gt;Previous part: &lt;a href=&quot;/roguelike-001/&quot;&gt;001 - Making an ASCII Roguelike in C++&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 

@@ -1,4 +1,4 @@
-I"y(<p>For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the <a href="https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices">Microchip Studio</a> (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the <strong>atmega328p</strong> specifically for MacOS.</p>
+I"�5<p>For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the <a href="https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices">Microchip Studio</a> (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the <strong>atmega324a</strong> specifically for MacOS.</p>
 
 <p><br /></p>
 
@@ -17,12 +17,12 @@
 
 <p><br /></p>
 
-<h2 id="makefile">MakeFile</h2>
-<p>Now, we can make a MakeFile.</p>
+<h2 id="makefile">Makefile</h2>
+<p>Now, we can make a Makefile.</p>
 
-<p>I modified a well crafted MakeFile retrieved from <a href="https://gist.github.com/holachek/3304890">HolaCheck’s Github</a> into working with my configuration (using the <strong>atmega328p</strong>). My final MakeFile can be found at <a href="https://pastebin.com/ENDP4XES">this pastebin</a> or at the bottom of the page.</p>
+<p>I modified a well crafted MakeFile retrieved from <a href="https://gist.github.com/holachek/3304890">HolaCheck’s Github</a> into working with my configuration (using the <strong>atmega324a</strong>). My final MakeFile can be found at <a href="https://pastebin.com/wKndwk0w">this pastebin</a> or at the bottom of the page.</p>
 
-<p>The MakeFile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.</p>
+<p>The Makefile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.</p>
 <ul>
   <li>
     <p>It should be clear that the variable <code class="language-plaintext highlighter-rouge">OBJECTS</code> is the list of compiled source files to be included.</p>
@@ -31,7 +31,7 @@
     <p>The <code class="language-plaintext highlighter-rouge">PORT</code> variable can be found by running <code class="language-plaintext highlighter-rouge">$ ls /dev/cu.*</code>. You should find two devices in the format of <code class="language-plaintext highlighter-rouge">cu.usbmodem002042642</code>. Typically, the lower number is the programmer port and is the one that should be assigned to our <code class="language-plaintext highlighter-rouge">PORT</code> variable.</p>
   </li>
   <li>
-    <p>When <code class="language-plaintext highlighter-rouge">$ make install</code> runs, you may see <code class="language-plaintext highlighter-rouge">Fuses OK (E:FF, H:D1, L:E6)</code> appear from <code class="language-plaintext highlighter-rouge">avrdude</code> or some variation. You can match these fuse values in the MakeFile. For example, we can deduce that the <code class="language-plaintext highlighter-rouge">-U hfuse:w:0xd1:m</code> in the MakeFile refers to the <code class="language-plaintext highlighter-rouge">H:d1</code> fuse. If your fuses are different, update them in the MakeFile.</p>
+    <p>When <code class="language-plaintext highlighter-rouge">$ make install</code> runs, you may see <code class="language-plaintext highlighter-rouge">Fuses OK (E:FF, H:D1, L:E6)</code> appear from <code class="language-plaintext highlighter-rouge">avrdude</code> or some variation. You can match these fuse values in the Makefile. For example, we can deduce that the <code class="language-plaintext highlighter-rouge">-U hfuse:w:0xd1:m</code> in the Makefile refers to the <code class="language-plaintext highlighter-rouge">H:d1</code> fuse. If your fuses are different, update them in the Makefile.</p>
   </li>
 </ul>
 
@@ -57,18 +57,67 @@
 
 <p><br /></p>
 
-<h2 id="conclusion">Conclusion</h2>
-<p>Now, we simply run the commands in the directory (with our arduino plugged in, of course).</p>
+<h2 id="testing">Testing</h2>
+<p>Now, we simply run the command in the directory (with our arduino plugged in, of course).</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>make clean
-<span class="nv">$ </span>make
-<span class="nv">$ </span>make <span class="nb">install</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>make <span class="nb">install</span></code></pre></figure>
 
-<p>And our program should have flashed to the arduino and should be working.</p>
+<p>And our program should have flashed to the arduino and should be immediately working.</p>
 
 <p><br /></p>
 
-<p><strong>MakeFile</strong></p>
+<h2 id="serial-communication">Serial Communication</h2>
+<p>As a final note, there will often be serial communication involved in your project. First, you need to know the serial port to communicate with.</p>
+
+<p>Following the same trick we used to find the programming port, we can check with <code class="language-plaintext highlighter-rouge">ls /dev/cu.*</code> to find the serial port. In my case, it looked like this:</p>
+
+<p><code class="language-plaintext highlighter-rouge">/dev/cu.usbserial-DA7WKGD</code></p>
+
+<p>Then, knowing the communication speed (in my case, 19200), we can run:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>screen /dev/cu.usbserial-DA7WKGD 19200</code></pre></figure>
+
+<p>and it should work perfect.</p>
+
+<p>You should note that sometimes you may get the errors that the port is busy for R/W. This can be solved by closing all <code class="language-plaintext highlighter-rouge">screen</code> processes in Activity Monitor, or by unplugging and replugging the USB.</p>
+
+<p><br /></p>
+
+<h2 id="potential-errors">Potential Errors</h2>
+<p>Ultimately, I was able to deduce this by reading from many different sources and filling in the blanks with an admittedly limited understanding.</p>
+
+<p>Because of this, there are potentially many errors that could arise, though I haven’t encountered any of them yet.</p>
+
+<p><br /></p>
+
+<h3 id="problem-1">Problem 1</h3>
+<p>As of writing this, <code class="language-plaintext highlighter-rouge">avrdude</code> does not support the <strong>atmega324a</strong>. To get around this, I made it so that <code class="language-plaintext highlighter-rouge">avrdude</code> is using the device <code class="language-plaintext highlighter-rouge">atmega328p</code>, while keeping the <code class="language-plaintext highlighter-rouge">-mmcu</code> flag in <code class="language-plaintext highlighter-rouge">avr-gcc</code> as <code class="language-plaintext highlighter-rouge">atmega324a</code>.</p>
+
+<p>As a consequence of this, every time I run <code class="language-plaintext highlighter-rouge">make install</code>, I get the response <code class="language-plaintext highlighter-rouge">make: *** [fuse] Error 1</code> and</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">avrdude: Device signature <span class="o">=</span> 0x1e9515
+avrdude: Expected signature <span class="k">for </span>ATmega328P is 1E 95 0F</code></pre></figure>
+
+<p>Though the program should still flash correctly.</p>
+
+<p><br /></p>
+
+<h3 id="problem-2">Problem 2</h3>
+<p>In my class, we were supplied a source file that would not compile with <code class="language-plaintext highlighter-rouge">avr-gcc</code> using my configuration. The errors were to do with some defined macros such as:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">SPCR0</span>
+<span class="n">SPSR0</span>
+<span class="n">SPR00</span>
+<span class="n">SPR10</span>
+<span class="n">SPDR0</span>
+<span class="n">SPIF0</span>
+<span class="n">SPSR0</span></code></pre></figure>
+
+<p>For this, I simply removed the postfixed <code class="language-plaintext highlighter-rouge">0</code> for each of these macros, and it compiled and flashed fine. As of now, I do not know the full consequences of this.</p>
+
+<p><br /></p>
+
+<p><strong>Makefile</strong></p>
 <details>
   <summary>Click to expand</summary>
 
@@ -87,8 +136,9 @@
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 </span>
-<span class="nv">DEVICE</span>     <span class="o">=</span> atmega328p
-<span class="nv">CLOCK</span>      <span class="o">=</span> 20000000
+<span class="nv">DEVICE</span>     <span class="o">=</span> atmega324a
+<span class="nv">AVRDUDEDEV</span> <span class="o">=</span> atmega328p
+<span class="nv">CLOCK</span>      <span class="o">=</span> 8000000
 <span class="nv">PORT</span>	   <span class="o">=</span> /dev/cu.usbmodem002042642
 <span class="nv">PROGRAMMER</span> <span class="o">=</span> <span class="nt">-c</span> stk500v2 <span class="nt">-P</span> <span class="nv">$(PORT)</span>
 <span class="nv">OBJECTS</span>    <span class="o">=</span> main.o other.o
@@ -100,7 +150,7 @@
 </span>
 <span class="c"># Tune the lines below only if you know what you are doing:
 </span>
-<span class="nv">AVRDUDE</span> <span class="o">=</span> avrdude <span class="nv">$(PROGRAMMER)</span> <span class="nt">-p</span> <span class="nv">$(DEVICE)</span>
+<span class="nv">AVRDUDE</span> <span class="o">=</span> avrdude <span class="nv">$(PROGRAMMER)</span> <span class="nt">-p</span> <span class="nv">$(AVRDUDEDEV)</span>
 <span class="nv">COMPILE</span> <span class="o">=</span> avr-gcc <span class="nt">-Wall</span> <span class="nt">-Os</span> <span class="nt">-DF_CPU</span><span class="o">=</span><span class="nv">$(CLOCK)</span> <span class="nt">-mmcu</span><span class="o">=</span><span class="nv">$(DEVICE)</span>
 
 <span class="c"># symbolic targets:

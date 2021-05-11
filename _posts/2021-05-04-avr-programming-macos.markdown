@@ -6,7 +6,7 @@ categories: jekyll update
 permalink: /avr-programming-macos/
 ---
 
-For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the [Microchip Studio](https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices) (formerly Atmel Studio) IDE. Instead, I'll be showing you how I set up developing for the **atmega328p** specifically for MacOS.
+For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the [Microchip Studio](https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices) (formerly Atmel Studio) IDE. Instead, I'll be showing you how I set up developing for the **atmega324a** specifically for MacOS.
 
 <br>
 
@@ -28,7 +28,7 @@ $ brew install avrdude
 ## Makefile
 Now, we can make a Makefile.
 
-I modified a well crafted MakeFile retrieved from [HolaCheck's Github](https://gist.github.com/holachek/3304890) into working with my configuration (using the **atmega328p**). My final MakeFile can be found at [this pastebin](https://pastebin.com/ENDP4XES) or at the bottom of the page.
+I modified a well crafted MakeFile retrieved from [HolaCheck's Github](https://gist.github.com/holachek/3304890) into working with my configuration (using the **atmega324a**). My final MakeFile can be found at [this pastebin](https://pastebin.com/wKndwk0w) or at the bottom of the page.
 
 The Makefile is where the majority of the work is done. The variables may depend on other factors and these are just what worked for me.
   - It should be clear that the variable `OBJECTS` is the list of compiled source files to be included.
@@ -92,6 +92,44 @@ You should note that sometimes you may get the errors that the port is busy for 
 
 <br>
 
+## Potential Errors
+Ultimately, I was able to deduce this by reading from many different sources and filling in the blanks with an admittedly limited understanding.
+
+Because of this, there are potentially many errors that could arise, though I haven't encountered any of them yet.
+
+<br>
+
+### Problem 1
+As of writing this, `avrdude` does not support the **atmega324a**. To get around this, I made it so that `avrdude` is using the device `atmega328p`, while keeping the `-mmcu` flag in `avr-gcc` as `atmega324a`.
+
+As a consequence of this, every time I run `make install`, I get the response `make: *** [fuse] Error 1` and
+
+{% highlight bash %}
+avrdude: Device signature = 0x1e9515
+avrdude: Expected signature for ATmega328P is 1E 95 0F
+{% endhighlight %}
+
+Though the program should still flash correctly.
+
+<br>
+
+### Problem 2
+In my class, we were supplied a source file that would not compile with `avr-gcc` using my configuration. The errors were to do with some defined macros such as:
+
+{% highlight c %}
+SPCR0
+SPSR0
+SPR00
+SPR10
+SPDR0
+SPIF0
+SPSR0
+{% endhighlight %}
+
+For this, I simply removed the postfixed `0` for each of these macros, and it compiled and flashed fine. As of now, I do not know the full consequences of this.
+
+<br>
+
 **Makefile**
 <details>
   <summary>Click to expand</summary>
@@ -111,8 +149,9 @@ You should note that sometimes you may get the errors that the port is busy for 
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
-DEVICE     = atmega328p
-CLOCK      = 20000000
+DEVICE     = atmega324a
+AVRDUDEDEV = atmega328p
+CLOCK      = 8000000
 PORT	   = /dev/cu.usbmodem002042642
 PROGRAMMER = -c stk500v2 -P $(PORT)
 OBJECTS    = main.o other.o
@@ -124,7 +163,7 @@ FUSES      = -U lfuse:w:0xE6:m -U hfuse:w:0xd1:m -U efuse:w:0xff:m
 
 # Tune the lines below only if you know what you are doing:
 
-AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE)
+AVRDUDE = avrdude $(PROGRAMMER) -p $(AVRDUDEDEV)
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 # symbolic targets:
