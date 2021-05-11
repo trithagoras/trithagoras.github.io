@@ -62,7 +62,7 @@ int main() {
 
 <br>
 
-## Conclusion
+## Testing
 Now, we simply run the command in the directory (with our arduino plugged in, of course).
 
 {% highlight bash %}
@@ -70,6 +70,25 @@ $ make install
 {% endhighlight %}
 
 And our program should have flashed to the arduino and should be immediately working.
+
+<br>
+
+## Serial Communication
+As a final note, there will often be serial communication involved in your project. First, you need to know the serial port to communicate with.
+
+Following the same trick we used to find the programming port, we can check with `ls /dev/cu.*` to find the serial port. In my case, it looked like this:
+
+`/dev/cu.usbserial-DA7WKGD`
+
+Then, knowing the communication speed (in my case, 19200), we can run:
+
+{% highlight bash %}
+$ screen /dev/cu.usbserial-DA7WKGD 19200
+{% endhighlight %}
+
+and it should work perfect.
+
+You should note that sometimes you may get the errors that the port is busy for R/W. This can be solved by closing all `screen` processes in Activity Monitor, or by unplugging and replugging the USB.
 
 <br>
 

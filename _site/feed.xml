@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-04T21:11:27+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega328p&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-05-11T13:41:37+10:00</updated><id>/feed.xml</id><title type="html">batchler.me</title><subtitle>Third year CS student at the University of Queensland.</subtitle><author><name>Corey Batchler</name></author><entry><title type="html">AVR programming on MacOS</title><link href="/avr-programming-macos/" rel="alternate" type="text/html" title="AVR programming on MacOS" /><published>2021-05-04T15:09:00+10:00</published><updated>2021-05-04T15:09:00+10:00</updated><id>/avr-programming-macos</id><content type="html" xml:base="/avr-programming-macos/">&lt;p&gt;For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the &lt;a href=&quot;https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices&quot;&gt;Microchip Studio&lt;/a&gt; (formerly Atmel Studio) IDE. Instead, I’ll be showing you how I set up developing for the &lt;strong&gt;atmega328p&lt;/strong&gt; specifically for MacOS.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -57,12 +57,29 @@
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
 &lt;p&gt;Now, we simply run the command in the directory (with our arduino plugged in, of course).&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And our program should have flashed to the arduino and should be immediately working.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;serial-communication&quot;&gt;Serial Communication&lt;/h2&gt;
+&lt;p&gt;As a final note, there will often be serial communication involved in your project. First, you need to know the serial port to communicate with.&lt;/p&gt;
+
+&lt;p&gt;Following the same trick we used to find the programming port, we can check with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ls /dev/cu.*&lt;/code&gt; to find the serial port. In my case, it looked like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/cu.usbserial-DA7WKGD&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, knowing the communication speed (in my case, 19200), we can run:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;screen /dev/cu.usbserial-DA7WKGD 19200&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;and it should work perfect.&lt;/p&gt;
+
+&lt;p&gt;You should note that sometimes you may get the errors that the port is busy for R/W. This can be solved by closing all &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;screen&lt;/code&gt; processes in Activity Monitor, or by unplugging and replugging the USB.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
