@@ -1,2 +1,0 @@
-I"—<p>For my microcontrollers university course, we were told that Windows OS was a requirement, as we needed to use the <a href="https://www.microchip.com/en-us/development-tools-tools-and-software/microchip-studio-for-avr-and-sam-devices">Microchip Studio</a> (formerly Atmel Studio) IDE. Instead, Iâ€™ll be showing you how I set up developing for the <strong>atmega324a</strong> specifically for MacOS.</p>
-:ET
