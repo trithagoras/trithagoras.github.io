@@ -1,0 +1,22 @@
+---
+// A Font Awesome icon as inline SVG (replaces @fortawesome/react-fontawesome).
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+
+interface Props {
+  icon: IconDefinition;
+  class?: string;
+  size?: '2xs' | 'lg';
+  fixedWidth?: boolean;
+}
+
+const { icon, class: className = '', size, fixedWidth } = Astro.props;
+const [width, height, , , path] = icon.icon;
+const sizes = { '2xs': 'text-[0.625em]', lg: 'text-[1.25em]' };
+---
+<svg
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${width} ${height}`}
+  fill="currentColor"
+  class:list={['inline-block h-[1em] align-[-0.125em] overflow-visible', fixedWidth ? 'w-[1.25em]' : 'w-auto', size && sizes[size], className]}
+><path d={Array.isArray(path) ? path.join(' ') : path} /></svg>
