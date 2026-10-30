@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = (await getCollection('posts')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Layout>
+  <div>
+    {posts.map((post) => (
+      <div class="p-4">
+        <span>{post.data.date.toDateString()}</span>
+        <a href={`/posts/${post.id}`}>
+          <h2 class="text-3xl text-blue-700 dark:text-blue-300 hover:underline">{post.data.title}</h2>
+        </a>
+      </div>
+    ))}
+  </div>
+</Layout>
